@@ -22,9 +22,14 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-public class SpheroService extends Service {
+public class SpheroService extends Service implements CollisionListener
+{
 
-    public interface SpheroListener {
+	
+
+    public interface SpheroListener
+	{
+		public void onCollisionDeteced(CollisionDetectedAsyncData collisionDetectedAsyncData);
         public void onSpheroConnected(final Sphero sphero);
         public void onSpheroDisonnected();
     }
@@ -88,12 +93,8 @@ public class SpheroService extends Service {
                 } ,SensorFlag.ACCELEROMETER_NORMALIZED, SensorFlag.GYRO_NORMALIZED);
                 control.setRate(1);
                 //Listen or Collisions
-                mRobot.getCollisionControl().startDetection(255,255,255,255,255);
-                mRobot.getCollisionControl().addCollisionListener(new CollisionListener() {
-                    public void collisionDetected(final CollisionDetectedAsyncData collisionData) {
-                        Log.d(TAG, collisionData.toString());
-                    }
-                });
+                mRobot.getCollisionControl().startDetection(45,45,100,100,100);
+                mRobot.getCollisionControl().addCollisionListener(SpheroService.this);
                 
                 //Setup some stuff
                 final boolean preventSleepInCharger = mRobot.getConfiguration().isPersistentFlagEnabled(PersistentOptionFlags.PreventSleepInCharger);
@@ -187,6 +188,12 @@ public class SpheroService extends Service {
         }
     }
 
-    
+
+	@Override
+	public void collisionDetected(CollisionDetectedAsyncData collisionDetectedAsyncData){
+		for(final SpheroListener spheroListener : mSperoListeners){
+            spheroListener.onCollisionDeteced(collisionDetectedAsyncData);
+        }
+	}    
 
 }
