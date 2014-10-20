@@ -22,14 +22,11 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-public class SpheroService extends Service implements CollisionListener
-{
-
-	
-
-    public interface SpheroListener
-	{
-		public void onCollisionDeteced(CollisionDetectedAsyncData collisionDetectedAsyncData);
+public class SpheroService extends Service implements CollisionListener, SensorListener{
+		
+    public interface SpheroListener {
+		public void onSensorUpdated(DeviceSensorsData deviceSensorData);
+		public void onCollisionDetected(CollisionDetectedAsyncData collisionDetectedAsyncData);
         public void onSpheroConnected(final Sphero sphero);
         public void onSpheroDisonnected();
     }
@@ -85,12 +82,7 @@ public class SpheroService extends Service implements CollisionListener
                 setSphero((Sphero) robot);
                 //Listen for Sensors
                 final SensorControl control = mRobot.getSensorControl();
-                control.addSensorListener(new SensorListener() {
-                    @Override
-                    public void sensorUpdated(final DeviceSensorsData sensorDataArray) {
-                        Log.d(TAG, sensorDataArray.toString());
-                    }
-                } ,SensorFlag.ACCELEROMETER_NORMALIZED, SensorFlag.GYRO_NORMALIZED);
+                control.addSensorListener(SpheroService.this ,SensorFlag.ACCELEROMETER_NORMALIZED, SensorFlag.GYRO_NORMALIZED);
                 control.setRate(1);
                 //Listen or Collisions
                 mRobot.getCollisionControl().startDetection(45,45,100,100,100);
@@ -192,8 +184,15 @@ public class SpheroService extends Service implements CollisionListener
 	@Override
 	public void collisionDetected(CollisionDetectedAsyncData collisionDetectedAsyncData){
 		for(final SpheroListener spheroListener : mSperoListeners){
-            spheroListener.onCollisionDeteced(collisionDetectedAsyncData);
+            spheroListener.onCollisionDetected(collisionDetectedAsyncData);
         }
 	}    
 
+
+	@Override
+	public void sensorUpdated(DeviceSensorsData deviceSensorData){
+		for(final SpheroListener spheroListener : mSperoListeners){
+            spheroListener.onSensorUpdated(deviceSensorData);
+        }
+	}
 }

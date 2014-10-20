@@ -9,23 +9,20 @@ import android.os.*;
 import android.view.View.*;
 import android.view.*;
 import orbotix.robot.base.*;
+import orbotix.robot.sensor.*;
 
-/** Connects to an available Sphero robot, and then flashes its LED. */
-public class HelloWorldActivity extends SpheroActivity implements Runnable, OnClickListener
-{
-	
+public class HelloWorldActivity extends SpheroActivity implements OnClickListener{
+
     private static final String TAG = "OBX-HelloWorld";
-    
-    //Tracking thread
-    private Thread blinker;
-    //Current thread
-    private Thread thread;
 
 	/** Handler for updating Views **/
 	private Handler handler = new Handler();
 	
 	/** button to toggle thread **/
 	private Button mButtonToggle;
+	
+	private BrainThread brain = new BrainThread();
+	private DeviceSensorsData deviceSensorData;
 	
     /** Called when the activity is first created. */
     @Override
@@ -38,13 +35,12 @@ public class HelloWorldActivity extends SpheroActivity implements Runnable, OnCl
     }
 
 	@Override
-	public void onClick(View p1)
-	{
-		if(blinker == null){
-			startThread();
+	public void onClick(View p1){
+		if(brain.isRunning()){
+			brain.startThread();
 			mButtonToggle.setText("Off");
 		} else {
-			stopThread();
+			brain.stopThread();
 			mButtonToggle.setText("On");
 		}
 	}
@@ -76,72 +72,23 @@ public class HelloWorldActivity extends SpheroActivity implements Runnable, OnCl
     public void onSpheroDisonnected() {
         Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show();
         finish();
-    }
+    }    
 
-	private float heading = 0f;
-    @Override
-    public void run() {
-        
-        final float velocity = .5f;
-        final Sphero sphero = getSphero();
-		final TextView tvStatus = (TextView) findViewById(R.id.tvStatus);
-        while(blinker == thread){
-            
-            //heading += 45.0f;
-            //if(heading >= 360){
-            //    heading = 0;
-            //}
-			final String strHeading = Float.toString(heading);
-			handler.post(new Runnable(){
-					@Override
-					public void run()
-					{
-						tvStatus.setText(strHeading);
-					}	
-			});
-			
-            sphero.drive(heading, velocity);
-            try {
-                Thread.sleep(10);
-            } catch (final InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        sphero.stop();
-    }
-    
-    private void startThread(){
-        blinker = new Thread(this);
-        thread = blinker;
-        thread.start();
-    }
-    
-    private void stopThread(){
-        blinker = null;
-        try{
-            thread.join();
-        } catch (final Exception e){
-            
-        }
-    }
-	
 
 	@Override
-	public void onCollisionDeteced(final CollisionDetectedAsyncData collisionDetectedAsyncData){
-		if(collisionDetectedAsyncData.hasImpactXAxis()){
-			heading += 135;
-			if(heading >= 360){
-				heading -= 360;
-			}
-			handler.post(new Runnable(){
-					
-				@Override
-				public void run(){
-					mButtonToggle.setText("Hit");	
-				}
-			});
-		}
+	public void onCollisionDetected(final CollisionDetectedAsyncData collisionDetectedAsyncData){
+		//Create Event and State then send to the brain
+		final Event event = new Event();
+		final State state = new State();
+		brain.onEvent(event, state);
+	}
+	
+	@Override
+	public void onSensorUpdated(final DeviceSensorsData deviceSensorData) {
+		//Just save the data
+		this.deviceSensorData = deviceSensorData;
+		final Event event = brain.getNextEvent();
+		
 	}
 	
 }
