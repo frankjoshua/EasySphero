@@ -10,4 +10,5 @@ public class Event{
 	
 	public EventType eventType;
 	public float eventValue;
+	public State state;
 }

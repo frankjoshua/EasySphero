@@ -46,14 +46,12 @@ public class SpheroBrainThread extends BrainThread implements SpheroListener {
     }
 
     @Override
-    public void onEvent(final Event event) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
     public void onLocationChanged(final LocatorData location) {
+        //Create Event
         final Event event = SpheroBrainTranslater.locationToEvent(location);
+        //Add current state
+        event.state = currentState;
+        //Report Event
         onEvent(event);
     }
 
