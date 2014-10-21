@@ -7,9 +7,11 @@ import orbotix.robot.base.CollisionDetectedAsyncData;
 import orbotix.robot.base.Robot;
 import orbotix.robot.base.RobotProvider;
 import orbotix.robot.sensor.DeviceSensorsData;
+import orbotix.robot.sensor.LocatorData;
 import orbotix.sphero.CollisionListener;
 import orbotix.sphero.ConnectionListener;
 import orbotix.sphero.DiscoveryListener;
+import orbotix.sphero.LocatorListener;
 import orbotix.sphero.PersistentOptionFlags;
 import orbotix.sphero.SensorControl;
 import orbotix.sphero.SensorFlag;
@@ -22,13 +24,14 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-public class SpheroService extends Service implements CollisionListener, SensorListener{
+public class SpheroService extends Service implements CollisionListener, SensorListener, LocatorListener{
 		
     public interface SpheroListener {
 		public void onSensorUpdated(DeviceSensorsData deviceSensorData);
 		public void onCollisionDetected(CollisionDetectedAsyncData collisionDetectedAsyncData);
         public void onSpheroConnected(final Sphero sphero);
         public void onSpheroDisonnected();
+        public void onLocationChanged(final LocatorData location);
     }
 
     public class LocalBinder extends Binder {
@@ -83,6 +86,7 @@ public class SpheroService extends Service implements CollisionListener, SensorL
                 //Listen for Sensors
                 final SensorControl control = mRobot.getSensorControl();
                 control.addSensorListener(SpheroService.this ,SensorFlag.ACCELEROMETER_NORMALIZED, SensorFlag.GYRO_NORMALIZED);
+                control.addLocatorListener(SpheroService.this);
                 control.setRate(1);
                 //Listen or Collisions
                 mRobot.getCollisionControl().startDetection(45,45,100,100,100);
@@ -182,7 +186,7 @@ public class SpheroService extends Service implements CollisionListener, SensorL
 
 
 	@Override
-	public void collisionDetected(CollisionDetectedAsyncData collisionDetectedAsyncData){
+	public void collisionDetected(final CollisionDetectedAsyncData collisionDetectedAsyncData){
 		for(final SpheroListener spheroListener : mSperoListeners){
             spheroListener.onCollisionDetected(collisionDetectedAsyncData);
         }
@@ -190,9 +194,17 @@ public class SpheroService extends Service implements CollisionListener, SensorL
 
 
 	@Override
-	public void sensorUpdated(DeviceSensorsData deviceSensorData){
+	public void sensorUpdated(final DeviceSensorsData deviceSensorData){
 		for(final SpheroListener spheroListener : mSperoListeners){
             spheroListener.onSensorUpdated(deviceSensorData);
         }
 	}
+
+
+    @Override
+    public void onLocatorChanged(final LocatorData location) {
+        for(final SpheroListener spheroListener : mSperoListeners){
+            spheroListener.onLocationChanged(location);
+        }
+    }
 }

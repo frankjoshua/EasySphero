@@ -11,7 +11,7 @@ abstract public interface Brain{
 	* Send Input to the Brain
 	* Brain receives input from the body
 	*/
-	abstract public void onEvent(final Event event, final State state);
+	abstract public void onEvent(final Event event);
 	
 	/**
 	* Get Output from the Brain

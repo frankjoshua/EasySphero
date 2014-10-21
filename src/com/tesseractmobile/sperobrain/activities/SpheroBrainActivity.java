@@ -2,6 +2,7 @@ package com.tesseractmobile.sperobrain.activities;
 
 import orbotix.robot.base.CollisionDetectedAsyncData;
 import orbotix.robot.sensor.DeviceSensorsData;
+import orbotix.robot.sensor.LocatorData;
 import orbotix.sphero.Sphero;
 import android.os.Bundle;
 import android.os.Handler;
@@ -87,5 +88,10 @@ public class SpheroBrainActivity extends SpheroActivity implements OnClickListen
 	public void onSensorUpdated(final DeviceSensorsData deviceSensorData) {
 		brain.onSensorUpdated(deviceSensorData);		
 	}
+
+    @Override
+    public void onLocationChanged(final LocatorData location) {
+        brain.onLocationChanged(location);
+    }
 	
 }

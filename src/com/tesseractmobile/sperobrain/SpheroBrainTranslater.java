@@ -1,7 +1,10 @@
 package com.tesseractmobile.sperobrain;
 import orbotix.robot.base.CollisionDetectedAsyncData;
 import orbotix.robot.sensor.DeviceSensorsData;
+import orbotix.robot.sensor.LocatorData;
 import orbotix.sphero.Sphero;
+
+import com.tesseractmobile.sperobrain.Event.EventType;
 
 public class SpheroBrainTranslater{
 	
@@ -16,7 +19,13 @@ public class SpheroBrainTranslater{
 	* Takes a Collision and Returns an Event
 	*/
 	static public Event collisionToEvent(final CollisionDetectedAsyncData collisionDetectedAsyncData){
-		throw new UnsupportedOperationException();
+		final Event event = new Event();
+	    if(collisionDetectedAsyncData.hasImpactXAxis() || collisionDetectedAsyncData.hasImpactYAxis()){
+		    event.eventType = EventType.COLLISION;
+		} else {
+		    event.eventType = EventType.NO_EVENT;
+		}
+	    return event;
 	}
 
 	/**
@@ -25,6 +34,16 @@ public class SpheroBrainTranslater{
 	 * @return
 	 */
     public static State sensorDataToState(final DeviceSensorsData deviceSensorData) {
+        final State state = new State();
+        return state;
+    }
+
+    /**
+     * Returns an Event from a location change
+     * @param location
+     * @return
+     */
+    public static Event locationToEvent(final LocatorData location) {
         throw new UnsupportedOperationException();
     }
 }
