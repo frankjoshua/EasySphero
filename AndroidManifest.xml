@@ -19,6 +19,6 @@
             </intent-filter>
         </activity>
         <!-- Service -->
-        <service android:name=".SpheroService"></service>
+        <service android:name="com.tesseractmobile.easysphero.SpheroService"></service>
     </application>
 </manifest> 

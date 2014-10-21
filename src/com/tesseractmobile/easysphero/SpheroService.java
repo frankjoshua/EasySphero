@@ -1,4 +1,4 @@
-package com.orbotix.sample.helloworld;
+package com.tesseractmobile.easysphero;
 
 import java.util.ArrayList;
 import java.util.List;

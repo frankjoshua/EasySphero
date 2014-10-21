@@ -1,4 +1,4 @@
-package com.orbotix.sample.helloworld;
+package com.tesseractmobile.easysphero;
 
 import orbotix.sphero.Sphero;
 import android.app.Activity;
@@ -8,8 +8,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
-import com.orbotix.sample.helloworld.SpheroService.LocalBinder;
-import com.orbotix.sample.helloworld.SpheroService.SpheroListener;
+import com.tesseractmobile.easysphero.SpheroService.LocalBinder;
+import com.tesseractmobile.easysphero.SpheroService.SpheroListener;
 
 public abstract class SpheroActivity extends Activity implements ServiceConnection, SpheroListener {
 

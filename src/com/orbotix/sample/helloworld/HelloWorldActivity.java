@@ -1,9 +1,10 @@
 package com.orbotix.sample.helloworld;
 
+import com.tesseractmobile.easysphero.SpheroActivity;
+
 import orbotix.sphero.Sphero;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 import android.widget.*;
 import android.os.*;
 import android.view.View.*;
