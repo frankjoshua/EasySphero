@@ -1,4 +1,4 @@
-package com.orbotix.sample.helloworld;
+package com.tesseractmobile.sperobrain;
 
 /**
 * A brain receives input in the form of events

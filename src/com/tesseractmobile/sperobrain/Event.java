@@ -1,4 +1,4 @@
-package com.orbotix.sample.helloworld;
+package com.tesseractmobile.sperobrain;
 
 /**
 * Events are created from input and stored in memory

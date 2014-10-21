@@ -1,28 +1,29 @@
-package com.orbotix.sample.helloworld;
+package com.tesseractmobile.sperobrain;
 
-import com.tesseractmobile.easysphero.SpheroActivity;
-
+import orbotix.robot.base.CollisionDetectedAsyncData;
+import orbotix.robot.sensor.DeviceSensorsData;
 import orbotix.sphero.Sphero;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
-import android.widget.*;
-import android.os.*;
-import android.view.View.*;
-import android.view.*;
-import orbotix.robot.base.*;
-import orbotix.robot.sensor.*;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.tesseractmobile.easysphero.SpheroActivity;
 
 public class HelloWorldActivity extends SpheroActivity implements OnClickListener{
 
     private static final String TAG = "OBX-HelloWorld";
 
 	/** Handler for updating Views **/
-	private Handler handler = new Handler();
+	private final Handler handler = new Handler();
 	
 	/** button to toggle thread **/
 	private Button mButtonToggle;
 	
-	private BrainThread brain = new BrainThread();
+	private final BrainThread brain = new BrainThread();
 	private DeviceSensorsData deviceSensorData;
 	
     /** Called when the activity is first created. */
@@ -36,7 +37,7 @@ public class HelloWorldActivity extends SpheroActivity implements OnClickListene
     }
 
 	@Override
-	public void onClick(View p1){
+	public void onClick(final View p1){
 		if(brain.isRunning()){
 			brain.startThread();
 			mButtonToggle.setText("Off");

@@ -1,4 +1,4 @@
-package com.orbotix.sample.helloworld;
+package com.tesseractmobile.sperobrain;
 import orbotix.sphero.*;
 import orbotix.robot.base.*;
 

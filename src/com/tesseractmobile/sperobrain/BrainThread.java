@@ -1,4 +1,4 @@
-package com.orbotix.sample.helloworld;
+package com.tesseractmobile.sperobrain;
 
 public class BrainThread extends Brain implements Runnable{
 	
