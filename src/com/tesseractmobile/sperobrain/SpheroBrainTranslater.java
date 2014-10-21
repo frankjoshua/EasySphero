@@ -1,13 +1,14 @@
 package com.tesseractmobile.sperobrain;
-import orbotix.sphero.*;
-import orbotix.robot.base.*;
+import orbotix.robot.base.CollisionDetectedAsyncData;
+import orbotix.robot.sensor.DeviceSensorsData;
+import orbotix.sphero.Sphero;
 
 public class SpheroBrainTranslater{
 	
 	/**
-	* Translates an Event and sends commands to the Sphero
+	* Translates an State and sends commands to the Sphero
 	*/
-	static public void eventToSphero(final Sphero sphero, final Event event){
+	static public void stateToSphero(final Sphero sphero, final State state){
 		throw new UnsupportedOperationException();
 	}
 	
@@ -17,4 +18,13 @@ public class SpheroBrainTranslater{
 	static public Event collisionToEvent(final CollisionDetectedAsyncData collisionDetectedAsyncData){
 		throw new UnsupportedOperationException();
 	}
+
+	/**
+	 * Takes Sensor data and returns a State
+	 * @param deviceSensorData
+	 * @return
+	 */
+    public static State sensorDataToState(final DeviceSensorsData deviceSensorData) {
+        throw new UnsupportedOperationException();
+    }
 }

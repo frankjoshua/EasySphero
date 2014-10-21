@@ -12,12 +12,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.tesseractmobile.easysphero.SpheroActivity;
-import com.tesseractmobile.sperobrain.BrainThread;
-import com.tesseractmobile.sperobrain.Event;
 import com.tesseractmobile.sperobrain.R;
-import com.tesseractmobile.sperobrain.State;
-import com.tesseractmobile.sperobrain.R.id;
-import com.tesseractmobile.sperobrain.R.layout;
+import com.tesseractmobile.sperobrain.SpheroBrainThread;
 
 public class SpheroBrainActivity extends SpheroActivity implements OnClickListener{
 
@@ -29,8 +25,7 @@ public class SpheroBrainActivity extends SpheroActivity implements OnClickListen
 	/** button to toggle thread **/
 	private Button mButtonToggle;
 	
-	private final BrainThread brain = new BrainThread();
-	private DeviceSensorsData deviceSensorData;
+	private final SpheroBrainThread brain = new SpheroBrainThread();
 	
     /** Called when the activity is first created. */
     @Override
@@ -85,18 +80,12 @@ public class SpheroBrainActivity extends SpheroActivity implements OnClickListen
 
 	@Override
 	public void onCollisionDetected(final CollisionDetectedAsyncData collisionDetectedAsyncData){
-		//Create Event and State then send to the brain
-		final Event event = new Event();
-		final State state = new State();
-		brain.onEvent(event, state);
+		brain.onCollisionDetected(collisionDetectedAsyncData);
 	}
 	
 	@Override
 	public void onSensorUpdated(final DeviceSensorsData deviceSensorData) {
-		//Just save the data
-		this.deviceSensorData = deviceSensorData;
-		final Event event = brain.getNextEvent();
-		
+		brain.onSensorUpdated(deviceSensorData);		
 	}
 	
 }

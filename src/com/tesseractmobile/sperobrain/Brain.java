@@ -5,16 +5,18 @@ package com.tesseractmobile.sperobrain;
 * Stores events in memory
 * Outputs events that become actions
 */
-abstract public class Brain{
+abstract public interface Brain{
 
 	/**
 	* Send Input to the Brain
+	* Brain receives input from the body
 	*/
 	abstract public void onEvent(final Event event, final State state);
 	
 	/**
 	* Get Output from the Brain
+	* Brain tries to change state of the body
 	*/
-	abstract public Event getNextEvent();
+	abstract public void setState(final State state);
 	
 }
