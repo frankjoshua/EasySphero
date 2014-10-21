@@ -1,4 +1,4 @@
-package com.tesseractmobile.sperobrain;
+package com.tesseractmobile.sperobrain.activities;
 
 import orbotix.robot.base.CollisionDetectedAsyncData;
 import orbotix.robot.sensor.DeviceSensorsData;
@@ -12,6 +12,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.tesseractmobile.easysphero.SpheroActivity;
+import com.tesseractmobile.sperobrain.BrainThread;
+import com.tesseractmobile.sperobrain.Event;
+import com.tesseractmobile.sperobrain.R;
+import com.tesseractmobile.sperobrain.State;
+import com.tesseractmobile.sperobrain.R.id;
+import com.tesseractmobile.sperobrain.R.layout;
 
 public class SpheroBrainActivity extends SpheroActivity implements OnClickListener{
 
