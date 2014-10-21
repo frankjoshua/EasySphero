@@ -1,6 +1,6 @@
 package com.tesseractmobile.sperobrain;
 
-abstract public class BrainThread implements Runnable, Brain{
+abstract public class BrainThread extends BasicBrain implements Runnable, Brain{
 	
 	//Tracking thread
     private Thread blinker;
@@ -11,8 +11,6 @@ abstract public class BrainThread implements Runnable, Brain{
 		    //Do thinking here
 		}
 	}
-
-
 
     @Override
 	public void onEvent(final Event event, final State state){
