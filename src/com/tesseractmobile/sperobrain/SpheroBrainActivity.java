@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.tesseractmobile.easysphero.SpheroActivity;
 
-public class HelloWorldActivity extends SpheroActivity implements OnClickListener{
+public class SpheroBrainActivity extends SpheroActivity implements OnClickListener{
 
     private static final String TAG = "OBX-HelloWorld";
 
