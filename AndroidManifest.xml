@@ -9,7 +9,7 @@
 
     <application android:label="@string/app_name" >
 
-        <activity android:name="SpheroBrainActivity"
+        <activity android:name=".activities.SpheroBrainActivity"
                   android:label="@string/app_name"
                   android:launchMode="singleTask"
                   android:configChanges="orientation|keyboard|keyboardHidden">
