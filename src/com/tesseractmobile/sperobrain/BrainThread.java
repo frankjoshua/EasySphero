@@ -9,10 +9,19 @@ abstract public class BrainThread extends BasicBrain implements Runnable{
 	public void run(){
 		while(Thread.currentThread() == blinker){
 		    //Do thinking here
+		    onState(getCurrentState());
+		    //Sleep
+		    try {
+                Thread.sleep(10);
+            } catch (final InterruptedException e) {
+                //Do Nothing
+            }
 		}
 	}
 	
-	public synchronized void startThread(){
+	protected abstract State getCurrentState();
+
+    public synchronized void startThread(){
         blinker = new Thread(this);
         blinker.start();
     }

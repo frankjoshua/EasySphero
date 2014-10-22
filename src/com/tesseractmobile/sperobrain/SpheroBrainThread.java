@@ -9,21 +9,21 @@ import com.tesseractmobile.easysphero.SpheroService.SpheroListener;
 
 public class SpheroBrainThread extends BrainThread implements SpheroListener {
 
-    /** Holds the last state received */
-    private State currentState = new State();
     private Sphero mSphero;
+    private LocatorData mLocation;
+    private CollisionDetectedAsyncData mCollisionDetectedAsyncData;
+    private DeviceSensorsData mDeviceSensorData;
     
     @Override
     public void onSensorUpdated(final DeviceSensorsData deviceSensorData) {
         //Just save the data
-        currentState = SpheroBrainTranslater.sensorDataToState(deviceSensorData);
+        this.mDeviceSensorData = deviceSensorData;
     }
 
     @Override
     public void onCollisionDetected(final CollisionDetectedAsyncData collisionDetectedAsyncData) {
-        //Create Event and State then send to the brain
-        final Event event = SpheroBrainTranslater.collisionToEvent(collisionDetectedAsyncData);
-        onEvent(event);
+        //Save the collision
+        this.mCollisionDetectedAsyncData = collisionDetectedAsyncData;
     }
 
     @Override
@@ -47,12 +47,13 @@ public class SpheroBrainThread extends BrainThread implements SpheroListener {
 
     @Override
     public void onLocationChanged(final LocatorData location) {
-        //Create Event
-        final Event event = SpheroBrainTranslater.locationToEvent(location);
-        //Add current state
-        event.state = currentState;
-        //Report Event
-        onEvent(event);
+        //Save location
+        this.mLocation = location;
+    }
+
+    @Override
+    protected State getCurrentState() {
+        return SpheroBrainTranslater.createState(mDeviceSensorData, mCollisionDetectedAsyncData, mLocation);
     }
 
 
