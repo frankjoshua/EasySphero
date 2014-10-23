@@ -53,6 +53,9 @@ public class SpheroBrainThread extends BrainThread implements SpheroListener {
 
     @Override
     protected State getCurrentState() {
+        if(mDeviceSensorData == null || mCollisionDetectedAsyncData == null || mLocation == null){
+            return new State();
+        }
         return SpheroBrainTranslater.createState(mDeviceSensorData, mCollisionDetectedAsyncData, mLocation);
     }
 
