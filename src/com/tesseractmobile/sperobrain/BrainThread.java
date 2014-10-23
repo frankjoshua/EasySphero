@@ -7,7 +7,7 @@ abstract public class BrainThread extends BasicBrain implements Runnable{
 	
 	@Override
 	public void run(){
-		while(Thread.currentThread() == blinker){
+		while(null != blinker){
 		    //Do thinking here
 		    onState(getCurrentState());
 		    //Sleep
