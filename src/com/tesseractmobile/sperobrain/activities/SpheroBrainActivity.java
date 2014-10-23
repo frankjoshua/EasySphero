@@ -40,7 +40,7 @@ public class SpheroBrainActivity extends SpheroActivity implements OnClickListen
 
 	@Override
 	public void onClick(final View p1){
-		if(brain.isRunning()){
+		if(brain.isRunning() == false){
 			brain.startThread();
 			mButtonToggle.setText("Off");
 		} else {
