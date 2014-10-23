@@ -12,7 +12,7 @@ abstract public class BrainThread extends BasicBrain implements Runnable{
 		    onState(getCurrentState());
 		    //Sleep
 		    try {
-                Thread.sleep(10);
+                Thread.sleep(1000);
             } catch (final InterruptedException e) {
                 //Do Nothing
             }

@@ -1,6 +1,4 @@
 package com.tesseractmobile.sperobrain;
-import java.util.Random;
-
 import orbotix.robot.base.CollisionDetectedAsyncData;
 import orbotix.robot.sensor.DeviceSensorsData;
 import orbotix.robot.sensor.LocatorData;
@@ -16,11 +14,11 @@ public class SpheroBrainTranslater{
 	}
 	
 	private static float stateToVelocity(final State state) {
-        return new Random().nextFloat();
+        return 1f;
     }
 
     private static float stateToHeading(final State state) {
-        return new Random().nextFloat();
+        return 0f;
     }
 
     /**

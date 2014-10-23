@@ -75,7 +75,6 @@ public class SpheroBrainActivity extends SpheroActivity implements OnClickListen
     @Override
     public void onSpheroDisonnected() {
         Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show();
-        finish();
     }    
 
 
