@@ -28,11 +28,12 @@ abstract public class BrainThread extends BasicBrain implements Runnable{
 
     public synchronized void stopThread(){
         try{
-            blinker.join();
+            final Thread t = blinker;
+            blinker = null;
+            t.join();
         } catch (final Exception e){
 
         }
-		blinker = null;
     }
 	
 	/**

@@ -56,25 +56,27 @@ public class SpheroBrainActivity extends SpheroActivity implements OnClickListen
         Log.d(TAG, "Connected: " + sphero);
         Toast.makeText(this, sphero.getName() + " Connected", Toast.LENGTH_LONG).show();
         enableButton(true);
+        brain.onSpheroConnected(sphero);
     }
 
 	private void enableButton(final boolean enable){
 		handler.post(new Runnable(){
-				@Override
-				public void run(){
-					mButtonToggle.setEnabled(enable);
-					if(enable){
-						mButtonToggle.setText("On");
-					} else {
-						mButtonToggle.setText("Off");
-					}
-				}	
-			});
+			@Override
+			public void run(){
+				mButtonToggle.setEnabled(enable);
+				if(enable){
+					mButtonToggle.setText("On");
+				} else {
+					mButtonToggle.setText("Off");
+				}
+			}	
+		});
 	}
 
     @Override
     public void onSpheroDisonnected() {
         Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show();
+        brain.onSpheroDisonnected();
     }    
 
 

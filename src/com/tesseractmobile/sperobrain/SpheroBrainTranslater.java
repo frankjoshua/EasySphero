@@ -14,11 +14,11 @@ public class SpheroBrainTranslater{
 	}
 	
 	private static float stateToVelocity(final State state) {
-        return 1f;
+        return state.velocity;
     }
 
     private static float stateToHeading(final State state) {
-        return 0f;
+        return state.heading;
     }
 
     /**
