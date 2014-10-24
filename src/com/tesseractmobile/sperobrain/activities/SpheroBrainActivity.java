@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tesseractmobile.easysphero.SpheroActivity;
@@ -93,6 +94,20 @@ public class SpheroBrainActivity extends SpheroActivity implements OnClickListen
     @Override
     public void onLocationChanged(final LocatorData location) {
         brain.onLocationChanged(location);
+        handler.post(new Runnable() {
+            
+            @Override
+            public void run() {
+                try {
+                    ((TextView) findViewById(R.id.tvVx)).setText(Float.toString(location.getVelocityX()));
+                    ((TextView) findViewById(R.id.tvVy)).setText(Float.toString(location.getVelocityY()));
+                    ((TextView) findViewById(R.id.tvPx)).setText(Float.toString(location.getPositionX()));
+                    ((TextView) findViewById(R.id.tvPy)).setText(Float.toString(location.getPositionY()));
+                } catch (final Exception e) {
+                    // TODO: handle exception
+                }
+            }
+        });
     }
 	
 }
