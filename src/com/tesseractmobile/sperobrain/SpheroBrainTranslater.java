@@ -11,6 +11,9 @@ public class SpheroBrainTranslater{
 	*/
 	static public void stateToSphero(final Sphero sphero, final State state){
 		sphero.drive(stateToHeading(state), stateToVelocity(state));
+		if(state.color != null){
+			sphero.setColor(state.color.red, state.color.green, state.color.blue);
+		}
 	}
 	
 	private static float stateToVelocity(final State state) {

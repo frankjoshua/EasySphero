@@ -1,5 +1,4 @@
 package com.tesseractmobile.sperobrain;
-import android.graphics.Color;
 
 public class State{
 	public float velocity;
@@ -9,4 +8,14 @@ public class State{
     public float y;
     public float vx;
     public float vy;
+	
+	static public class Color{
+		public int red, green, blue;
+		
+		public Color(final int r, final int g, final int b){
+			this.red = r;
+			this.green = g;
+			this.blue = b;
+		}
+	}
 }
