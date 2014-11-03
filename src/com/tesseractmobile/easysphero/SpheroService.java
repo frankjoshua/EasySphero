@@ -24,7 +24,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-public class SpheroService extends Service implements CollisionListener, SensorListener, LocatorListener{
+public class SpheroService extends Service implements CollisionListener, SensorListener, LocatorListener, ConnectionListener, DiscoveryListener{
 		
     public interface SpheroListener {
 		public void onSensorUpdated(DeviceSensorsData deviceSensorData);
@@ -55,6 +55,18 @@ public class SpheroService extends Service implements CollisionListener, SensorL
         return binder ;
     }
 
+    @Override
+    public boolean onUnbind(final Intent intent) {
+        //If no more listeners shut down the Sphero
+        if(mSperoListeners.size() == 0){
+            Log.d(TAG, "Dissconecting Sphero");
+            RobotProvider.getDefaultProvider().endDiscovery();
+            RobotProvider.getDefaultProvider().disconnectControlledRobots();
+            RobotProvider.getDefaultProvider().shutdown();
+        }
+        return super.onUnbind(intent);
+    }
+
     /**
      * Register to listen for Sphero connection events
      * @param spheroListener
@@ -78,69 +90,10 @@ public class SpheroService extends Service implements CollisionListener, SensorL
     @Override
     public void onCreate() {
         super.onCreate();
-        RobotProvider.getDefaultProvider().addConnectionListener(new ConnectionListener() {
-            @Override
-            public void onConnected(final Robot robot) {
-                //Register Sphero
-                setSphero((Sphero) robot);
-                //Listen for Sensors
-                final SensorControl control = mRobot.getSensorControl();
-                control.addSensorListener(SpheroService.this ,SensorFlag.ACCELEROMETER_NORMALIZED, SensorFlag.GYRO_NORMALIZED);
-                control.addLocatorListener(SpheroService.this);
-                control.setRate(1);
-                //Listen or Collisions
-                mRobot.getCollisionControl().startDetection(45,45,100,100,100);
-                mRobot.getCollisionControl().addCollisionListener(SpheroService.this);
-                
-                //Setup some stuff
-                final boolean preventSleepInCharger = mRobot.getConfiguration().isPersistentFlagEnabled(PersistentOptionFlags.PreventSleepInCharger);
-                Log.d(TAG, "Prevent Sleep in charger = " + preventSleepInCharger);
-                Log.d(TAG, "VectorDrive = " + mRobot.getConfiguration().isPersistentFlagEnabled(PersistentOptionFlags.EnableVectorDrive));
-
-                mRobot.getConfiguration().setPersistentFlag(PersistentOptionFlags.PreventSleepInCharger, false);
-                mRobot.getConfiguration().setPersistentFlag(PersistentOptionFlags.EnableVectorDrive, true);
-
-                Log.d(TAG, "VectorDrive = " + mRobot.getConfiguration().isPersistentFlagEnabled(PersistentOptionFlags.EnableVectorDrive));
-                Log.v(TAG, mRobot.getConfiguration().toString());
-                
-                mRobot.enableStabilization(true);
-                mRobot.drive(90, 0);
-                mRobot.setBackLEDBrightness(.5f);
-            }
-
-            @Override
-            public void onConnectionFailed(final Robot sphero) {
-                Log.d(TAG, "Connection Failed: " + sphero);
-                Toast.makeText(SpheroService.this, "Sphero Connection Failed", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onDisconnected(final Robot robot) {
-                Log.d(TAG, "Disconnected: " + robot);
-                Toast.makeText(SpheroService.this, "Sphero Disconnected", Toast.LENGTH_SHORT).show();
-                setSphero(null);
-            }
-        });
-
-        RobotProvider.getDefaultProvider().addDiscoveryListener(new DiscoveryListener() {
-            @Override
-            public void onBluetoothDisabled() {
-                Log.d(TAG, "Bluetooth Disabled");
-                Toast.makeText(SpheroService.this, "Bluetooth Disabled", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void discoveryComplete(final List<Sphero> spheros) {
-                Log.d(TAG, "Found " + spheros.size() + " robots");
-            }
-
-            @Override
-            public void onFound(final List<Sphero> sphero) {
-                Log.d(TAG, "Found: " + sphero);
-                RobotProvider.getDefaultProvider().connect(sphero.iterator().next());
-            }
-        });
-
+        //Add listeners
+        RobotProvider.getDefaultProvider().addConnectionListener(this);
+        RobotProvider.getDefaultProvider().addDiscoveryListener(this);
+        //Start Discovery
         final boolean success = RobotProvider.getDefaultProvider().startDiscovery(this);
         if(!success){
             Toast.makeText(SpheroService.this, "Unable To start Discovery!", Toast.LENGTH_LONG).show();
@@ -206,5 +159,64 @@ public class SpheroService extends Service implements CollisionListener, SensorL
         for(final SpheroListener spheroListener : mSperoListeners){
             spheroListener.onLocationChanged(location);
         }
+    }
+
+    @Override
+    public void onConnected(final Robot robot) {
+      //Register Sphero
+        setSphero((Sphero) robot);
+        //Listen for Sensors
+        final SensorControl control = mRobot.getSensorControl();
+        control.addSensorListener(SpheroService.this ,SensorFlag.ACCELEROMETER_NORMALIZED, SensorFlag.GYRO_NORMALIZED);
+        control.addLocatorListener(SpheroService.this);
+        control.setRate(1);
+        //Listen or Collisions
+        mRobot.getCollisionControl().startDetection(45,45,100,100,100);
+        mRobot.getCollisionControl().addCollisionListener(SpheroService.this);
+        
+        //Setup some stuff
+        final boolean preventSleepInCharger = mRobot.getConfiguration().isPersistentFlagEnabled(PersistentOptionFlags.PreventSleepInCharger);
+        Log.d(TAG, "Prevent Sleep in charger = " + preventSleepInCharger);
+        Log.d(TAG, "VectorDrive = " + mRobot.getConfiguration().isPersistentFlagEnabled(PersistentOptionFlags.EnableVectorDrive));
+
+        mRobot.getConfiguration().setPersistentFlag(PersistentOptionFlags.PreventSleepInCharger, false);
+        mRobot.getConfiguration().setPersistentFlag(PersistentOptionFlags.EnableVectorDrive, true);
+
+        Log.d(TAG, "VectorDrive = " + mRobot.getConfiguration().isPersistentFlagEnabled(PersistentOptionFlags.EnableVectorDrive));
+        Log.v(TAG, mRobot.getConfiguration().toString());
+        
+        mRobot.enableStabilization(true);
+        mRobot.drive(90, 0);
+        mRobot.setBackLEDBrightness(.5f);
+    }
+
+    @Override
+    public void onConnectionFailed(final Robot sphero) {
+        Log.d(TAG, "Connection Failed: " + sphero);
+        Toast.makeText(SpheroService.this, "Sphero Connection Failed", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDisconnected(final Robot robot) {
+        Log.d(TAG, "Disconnected: " + robot);
+        Toast.makeText(SpheroService.this, "Sphero Disconnected", Toast.LENGTH_SHORT).show();
+        setSphero(null);
+    }
+
+    @Override
+    public void discoveryComplete(final List<Sphero> spheros) {
+        Log.d(TAG, "Found " + spheros.size() + " robots");
+    }
+
+    @Override
+    public void onBluetoothDisabled() {
+        Log.d(TAG, "Bluetooth Disabled");
+        Toast.makeText(SpheroService.this, "Bluetooth Disabled", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFound(final List<Sphero> spheros) {
+        Log.d(TAG, "Found: " + spheros);
+        RobotProvider.getDefaultProvider().connect(spheros.iterator().next());
     }
 }

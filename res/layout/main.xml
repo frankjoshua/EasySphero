@@ -1,87 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:background="#ff123456" >
 
     <Button
-        android:id="@+id/btnToggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/btnStop"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Stop" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Velocity X: "
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/tvVx"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btnForward"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_above="@+id/btnStop"
+        android:layout_alignLeft="@+id/btnStop"
+        android:layout_marginBottom="25dp"
+        android:text="Forward" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Velocity Y: "
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/tvVy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btnLeft"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_alignBaseline="@+id/btnStop"
+        android:layout_alignBottom="@+id/btnStop"
+        android:layout_marginRight="25dp"
+        android:layout_toLeftOf="@+id/btnStop"
+        android:text="Left" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Position X: "
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/tvPx"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_below="@+id/btnStop"
+        android:layout_marginTop="25dp"
+        android:layout_toRightOf="@+id/btnLeft"
+        android:text="Back" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Position Y: "
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+    <Button
+        android:id="@+id/btnRight"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnBack"
+        android:layout_marginLeft="25dp"
+        android:layout_toRightOf="@+id/btnForward"
+        android:text="Right" />
 
-        <TextView
-            android:id="@+id/tvPy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-    </LinearLayout>
-    
+    <View
+        android:id="@+id/viewStatus"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/btnLeft"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="25dp"
+        android:background="#ffff0000" />
 
-</LinearLayout>
+</RelativeLayout>
